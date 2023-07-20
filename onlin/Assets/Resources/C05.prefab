@@ -11532,8 +11532,8 @@ MonoBehaviour:
   myPV: {fileID: 3652908554095899022}
   myPTV: {fileID: 369763305365178457}
   speed: 8
-  jumpSpeed: 15
-  slideSpeed: 3
+  jumpSpeed: 8
+  slideSpeed: 10
   rotateSpeed: 10
   gravity: 20
   velocity: {x: 0, y: 0, z: 0}

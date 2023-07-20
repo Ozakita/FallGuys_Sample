@@ -50,7 +50,7 @@ public class LauncherScript : Photon.PunBehaviour
     {
         Debug.Log("ルームに入りました。");
         //battleシーンをロード
-        PhotonNetwork.LoadLevel("battle");
+        PhotonNetwork.LoadLevel("Battle");
     }
 
     #endregion

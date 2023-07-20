@@ -35,7 +35,6 @@ public class MoveScript : StateMachineBehaviour
             animator.SetTrigger("Slide");
             return;
         }
-
         // ジャンプに遷移する
         if (Input.GetButtonDown("Jump") && controller.IsGrounded())
         {
@@ -46,8 +45,14 @@ public class MoveScript : StateMachineBehaviour
 
         // 走行アニメーション
         animator.SetFloat("Speed", controller.MoveInput().magnitude);
+
+        Vector3 velocity;
         // 移動のベクトルを計算
-        controller.velocity = controller.TargetDirection() * controller.speed;
+        //controller.velocity = controller.TargetDirection().normalized * controller.speed;
+
+        velocity = controller.TargetDirection().normalized * controller.speed;
+        controller.velocity.x = velocity.x;
+        controller.velocity.z = velocity.z;
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

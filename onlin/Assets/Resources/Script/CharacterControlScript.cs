@@ -58,6 +58,8 @@ public class CharacterControlScript : MonoBehaviour
 
         // 移動処理
         MoveControl();
+        // 重力処理
+        GravityControl();
         // 旋回処理
         RotationControl();
         // 最終的な移動処理
@@ -99,14 +101,27 @@ public class CharacterControlScript : MonoBehaviour
         }
     }
 
+    // 重力処理
+    void GravityControl()
+    {
+        // 地面に着地している場合
+        if (IsGrounded())
+            return;
+        // 重力を有効にする
+        velocity.y -= gravity * Time.deltaTime;
+    }
+
     // 空中移動処理
     public void AirMoveControl()
     {
-        float tempy = velocity.y;
-        //(↓の２文の処理があると空中でも入力方向に動けるようになる)
-        velocity = Vector3.Scale(targetDirection, new Vector3(1, 0, 1)).normalized;
-        velocity *= speed;
-        velocity.y = tempy - gravity * Time.deltaTime;
+        // 移動量
+        Vector3 v;
+        // 空中での移動制御
+        v = Vector3.Scale(targetDirection, new Vector3(1, 0, 1)).normalized;
+        v *= speed;
+        // 移動量を更新
+        velocity.x = v.x;
+        velocity.z = v.z;
     }
 
     // 地面に着地しているかの取得
@@ -125,5 +140,11 @@ public class CharacterControlScript : MonoBehaviour
     public Vector2 MoveInput()
     {
         return input;
+    }
+
+    // 前方向ベクトルを取得
+    public Vector3 Forward()
+    {
+        return this.gameObject.transform.forward;
     }
 }

@@ -16,6 +16,13 @@ public class JumpStartScript : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        // スライディングに遷移する
+        if (Input.GetButtonDown("Slide"))
+        {
+            animator.SetTrigger("Slide");
+            return;
+        }
+
         // 上に上昇する
         controller.velocity.y = controller.jumpSpeed;
     }

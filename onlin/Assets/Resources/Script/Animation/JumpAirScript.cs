@@ -26,6 +26,13 @@ public class JumpAirScript : StateMachineBehaviour
         if (!myPV.isMine)
             return;
 
+        // スライディングに遷移する
+        if (Input.GetButtonDown("Slide"))
+        {
+            animator.SetTrigger("Slide");
+            return;
+        }
+
         // 着地したら遷移する
         if (controller.IsGrounded())
         {
