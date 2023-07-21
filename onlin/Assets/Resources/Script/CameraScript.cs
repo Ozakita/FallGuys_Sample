@@ -23,9 +23,18 @@ public class CameraScript : MonoBehaviour
     private float moveY = 2.0f;     //マウスドラッグによるカメラY方向回転係数
     private float moveX_QE = 2.0f;  //QEキーによるカメラX方向回転係数
 
+    // Rayの長さ
+    [SerializeField] private float rayLength = 1f;
+    // Rayをどれくらい身体にめり込ませるか
+    [SerializeField] private float rayOffset;
+    // Rayの判定に用いるLayer
+    [SerializeField] private LayerMask layerMask = default;
+
+    private bool isCollide = false;
+
     void Start()
     {
-
+        isCollide = false;
     }
 
     void Update()
@@ -62,8 +71,28 @@ public class CameraScript : MonoBehaviour
 
             transform.position = lookAt + rotation * dir;   //カメラの位置を変更
             transform.LookAt(lookAt);   //カメラをLookAtの方向に向けさせる
-        }
 
+            // カメラの当たり判定処理
+            RaycastHit hit;
+            if (Physics.Linecast(transform.position, target.position, out hit, layerMask))
+            {
+                isCollide = true;
+                transform.position = hit.point;
+                Debug.Log(hit.distance);
+                Debug.Log(hit.transform.position);
+            }
+            else
+            {
+                isCollide = false;
+            }
+        }
     }
 
+    // Debug用にRayを可視化する
+    private void OnDrawGizmos()
+    {
+        // 接地判定時は緑、空中にいるときは赤にする
+        Gizmos.color = isCollide ? Color.green : Color.red;
+        Gizmos.DrawLine(transform.position, target.position);
+    }
 }

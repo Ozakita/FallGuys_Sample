@@ -30,7 +30,7 @@ public class RaycastCheck : MonoBehaviour
     {
         // 放つ光線の初期位置と姿勢
         // 若干身体にめり込ませた位置から発射しないと正しく判定できない時がある
-        var ray = new Ray(origin: transform.position + Vector3.up * rayOffset, direction: Vector3.down);
+        var ray = new Ray(transform.position + Vector3.up * rayOffset, Vector3.down);
 
         // Raycastがhitするかどうかで判定
         // レイヤの指定を忘れずに

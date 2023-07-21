@@ -7,6 +7,7 @@ public class GameManagerScript : Photon.PunBehaviour
 {
     //誰かがログインする度に生成するプレイヤーPrefab
     public GameObject playerPrefab;
+    public Vector3 generatePosition;
 
     void Start()
     {
@@ -16,7 +17,7 @@ public class GameManagerScript : Photon.PunBehaviour
             return;
         }
         //Photonに接続していれば自プレイヤーを生成
-        GameObject Player = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(36.0f, 0f, 28.0f), Quaternion.identity, 0);
+        GameObject Player = PhotonNetwork.Instantiate(this.playerPrefab.name, generatePosition, Quaternion.identity, 0);
     }
 
     // Update is called once per frame
