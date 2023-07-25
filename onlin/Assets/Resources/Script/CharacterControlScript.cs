@@ -11,7 +11,7 @@ public class CharacterControlScript : MonoBehaviour
     // 移動処理に必要なコンポーネントを設定
     private Animator animator;                 // モーションのコントロール
     private CharacterController controller;    // キャラクター移動の管理
-    private RaycastCheck raycast;              // 着地しているかどうかの判定
+    private SphereCastCheck sphereCast;        // 着地しているかどうかの判定
     private Camera mainCam;
 
     // パラメータ用変数(inspectorビューで設定)
@@ -37,8 +37,8 @@ public class CharacterControlScript : MonoBehaviour
         animator = GetComponent<Animator>();
         // CharacterControllerを取得
         controller = GetComponent<CharacterController>();
-        // RaycastCheckを取得
-        raycast = GetComponent<RaycastCheck>();
+        // SphereCastCheckを取得
+        sphereCast = GetComponent<SphereCastCheck>();
         // 移動量を初期化
         velocity = Vector3.zero;
         // 移動の入力を初期化
@@ -127,7 +127,7 @@ public class CharacterControlScript : MonoBehaviour
     // 地面に着地しているかの取得
     public bool IsGrounded()
     {
-        return raycast.isGrounded();
+        return sphereCast.isCollided();
     }
 
     // 進行方向のベクトルの取得

@@ -29,13 +29,19 @@ public class MoveScript : StateMachineBehaviour
         if (!myPV.isMine)
             return;
 
-        // スライディングに遷移する
+        // プッシュ状態に遷移する
+        if (Input.GetButtonDown("Push"))
+        {
+            animator.SetTrigger("Push");
+            return;
+        }
+        // スライディング状態に遷移する
         if (Input.GetButtonDown("Slide"))
         {
             animator.SetTrigger("Slide");
             return;
         }
-        // ジャンプに遷移する
+        // ジャンプ状態に遷移する
         if (Input.GetButtonDown("Jump") && controller.IsGrounded())
         {
             // Jumpフラグをオン
@@ -48,8 +54,6 @@ public class MoveScript : StateMachineBehaviour
 
         Vector3 velocity;
         // 移動のベクトルを計算
-        //controller.velocity = controller.TargetDirection().normalized * controller.speed;
-
         velocity = controller.TargetDirection().normalized * controller.speed;
         controller.velocity.x = velocity.x;
         controller.velocity.z = velocity.z;
