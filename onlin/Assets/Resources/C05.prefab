@@ -11451,7 +11451,7 @@ GameObject:
   - component: {fileID: 6642007616457031670}
   m_Layer: 6
   m_Name: C05
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11537,6 +11537,7 @@ MonoBehaviour:
   rotateSpeed: 10
   gravity: 20
   velocity: {x: 0, y: 0, z: 0}
+  pushPrefab: {fileID: 757498408050532993, guid: d9fcdbc8814c11d478b6a6396d2dbc24, type: 3}
 --- !u!114 &-5902158392512510695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11687,7 +11688,10 @@ MonoBehaviour:
     Name: Slide
   - Type: 9
     SynchronizeType: 0
-    Name: Air
+    Name: Push
+  - Type: 9
+    SynchronizeType: 0
+    Name: Damage
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0

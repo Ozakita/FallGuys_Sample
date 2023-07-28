@@ -30,9 +30,11 @@ public class MoveScript : StateMachineBehaviour
             return;
 
         // プッシュ状態に遷移する
-        if (Input.GetButtonDown("Push"))
+        if (Input.GetButtonDown("Push") && !controller.IsPush())
         {
             animator.SetTrigger("Push");
+            // Push処理
+            controller.PushControl();
             return;
         }
         // スライディング状態に遷移する
@@ -52,9 +54,8 @@ public class MoveScript : StateMachineBehaviour
         // 走行アニメーション
         animator.SetFloat("Speed", controller.MoveInput().magnitude);
 
-        Vector3 velocity;
         // 移動のベクトルを計算
-        velocity = controller.TargetDirection().normalized * controller.speed;
+        Vector3 velocity = controller.TargetDirection().normalized * controller.MoveInput().magnitude * controller.speed;
         controller.velocity.x = velocity.x;
         controller.velocity.z = velocity.z;
     }

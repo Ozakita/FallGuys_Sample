@@ -18,7 +18,7 @@ public class CameraScript : MonoBehaviour
     private Vector2 current = new Vector2(0, 0);
     //カメラ回転用係数(値が大きいほど回転速度が上がる)
     [SerializeField] private float moveX = 1.0f;     // カメラX方向回転係数
-    [SerializeField] private float moveY = 0.8f;     // カメラY方向回転係数
+    [SerializeField] private float moveY = 0.5f;     // カメラY方向回転係数
     private const float YAngle_MIN = -80.0f;   //カメラのY方向の最小角度
     private const float YAngle_MAX = 30.0f;    //カメラのY方向の最大角度
 
@@ -35,48 +35,60 @@ public class CameraScript : MonoBehaviour
 
     void Update()
     {
+        // カメラ位置をリセットする（プレイヤーの前方向を向く）
+        if (Input.GetButtonDown("CameraReset"))
+        {
+            transform.forward = target.forward;
+            Debug.Log("Reset");
+        }
+
         //マウス右クリックを押しているときだけマウスの移動量に応じてカメラが回転
         if (Input.GetMouseButton(1))
         {
             current.x += Input.GetAxis("Mouse X") * 4.0f;
             current.y += Input.GetAxis("Mouse Y") * 2.0f;
-            current.y = Mathf.Clamp(current.y, YAngle_MIN, YAngle_MAX);
         }
         else
         {
             current.x += Input.GetAxis("CameraYaw") * moveX;
             current.y += Input.GetAxis("CameraPitch") * moveY;
-            current.y = Mathf.Clamp(current.y, YAngle_MIN, YAngle_MAX);
         }
+        // カメラの回転の制限
+        current.y = Mathf.Clamp(current.y, YAngle_MIN, YAngle_MAX);
+        // ターゲットとカメラの距離の制限
         distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel"), distance_min, distance_max);
     }
     void LateUpdate()
     {
-        if (target != null)  //targetが指定されるまでのエラー回避
+        // ターゲットがいない場合
+        if (target == null)
+            return;
+
+        // 注視座標はtarget位置+offsetの座標
+        lookAt = target.position + offset;  
+
+        //カメラ旋回処理
+        Vector3 dir = new Vector3(0, 0, -distance);
+        Quaternion rotation = Quaternion.Euler(-current.y, current.x, 0);
+        
+        // カメラの位置を変更
+        transform.position = lookAt + rotation * dir;
+        // カメラをLookAtの方向に向けさせる
+        transform.LookAt(lookAt);   
+
+        // 衝突が有効か？
+        if (!isCollideEnable)
+            return;
+
+        // カメラの当たり判定処理
+        if (CheckCollide())
         {
-            lookAt = target.position + offset;  //注視座標はtarget位置+offsetの座標
-
-            //カメラ旋回処理
-            Vector3 dir = new Vector3(0, 0, -distance);
-            Quaternion rotation = Quaternion.Euler(-current.y, current.x, 0);
-
-            transform.position = lookAt + rotation * dir;   //カメラの位置を変更
-            transform.LookAt(lookAt);   //カメラをLookAtの方向に向けさせる
-
-            // 衝突が有効か？
-            if (!isCollideEnable)
-                return;
-
-            // カメラの当たり判定処理
-            if (CheckCollide())
-            {
-                transform.position = hit.point;
-                isCollide = true;
-            }
-            else
-            {
-                isCollide = false;
-            }
+            transform.position = hit.point;
+            isCollide = true;
+        }
+        else
+        {
+            isCollide = false;
         }
     }
 

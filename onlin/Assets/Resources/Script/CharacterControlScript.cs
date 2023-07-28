@@ -26,6 +26,10 @@ public class CharacterControlScript : MonoBehaviour
     Vector3 targetDirection;    // 進行方向のベクトル
     Vector2 input;              // 移動の入力
 
+    // Push用のGameObject
+    public GameObject pushPrefab;
+    private bool isPush = false;
+
     // 初期化
     void Start()
     {
@@ -124,6 +128,82 @@ public class CharacterControlScript : MonoBehaviour
         velocity.z = v.z;
     }
 
+    // Push処理
+    public void PushControl()
+    {
+        // Pushフラグをオン
+        isPush = true;
+        StartCoroutine(_pushCollide(1f));
+    }
+
+    IEnumerator _pushCollide(float pauseTime)
+    {
+        // 自身の中心位置
+        Vector3 center = transform.position + controller.center;
+        // 生成位置
+        Vector3 position = center + transform.forward;
+        // RPCでPushの判定を生成
+        myPV.RPC("PushGenerate", PhotonTargets.AllViaServer, position, transform.rotation);
+        // pauseTimeだけ待つ
+        yield return new WaitForSeconds(pauseTime);
+        // Pushisフラグをオフ
+        isPush = false;
+    }
+
+    [PunRPC] // Pushの判定を生成
+    void PushGenerate(Vector3 instpos, Quaternion instrot, PhotonMessageInfo info)
+    {
+        GameObject push = Instantiate(pushPrefab, instpos, instrot) as GameObject;
+        // 自分の情報を乗せる
+        push.GetComponent<PushManagerScript>().player = info.sender;
+    }
+
+    // 被弾処理
+    private void OnTriggerEnter(Collider other)
+    {
+        // 自キャラ以外なら処理しない
+        if (!myPV.isMine)
+            return;
+
+        OnCollide(other);
+
+        // Push判定の生成者
+        PhotonPlayer player = other.GetComponent<PushManagerScript>().player;
+
+        // 自分が生成したもの、または衝突したものがPush判定以外の場合
+        if (player.IsLocal || !other.CompareTag("Push"))
+            return;
+        // ダメージ状態へ遷移
+        animator.SetTrigger("Damage");
+        // ノックバックする
+        velocity = -other.transform.forward * 0.5f;
+    }
+
+    // 衝突処理
+    private void OnCollide(Collider other)
+    {
+        // 自分の座標
+        Vector3 position = transform.position;
+        // 相手の座標
+        Vector3 target = other.transform.position;
+        // y座標を除く
+        position.y = 0.0f;
+        target.y = 0.0f;
+        // 相手との距離
+        float distance = Vector3.Distance(position, target);
+        // 相手の半径
+        float targetRadius = (other.CompareTag("Player")) 
+            ? other.GetComponent<CharacterController>().radius
+            : other.GetComponent<SphereCollider>().radius;
+        // 衝突判定球の半径同士を加えた長さを求める
+        float length = controller.radius + targetRadius;
+        // 衝突判定球の重なっている長さを求める
+        float overlap = length - distance;
+        // 重なっている部分の半分の距離だけ離れる
+        Vector3 leaveDistance = (position - target).normalized * overlap * 0.5f;
+        transform.Translate(leaveDistance, Space.World);
+    }
+
     // 地面に着地しているかの取得
     public bool IsGrounded()
     {
@@ -146,5 +226,11 @@ public class CharacterControlScript : MonoBehaviour
     public Vector3 Forward()
     {
         return this.gameObject.transform.forward;
+    }
+
+    // Pushフラグ
+    public bool IsPush()
+    {
+        return isPush;
     }
 }
