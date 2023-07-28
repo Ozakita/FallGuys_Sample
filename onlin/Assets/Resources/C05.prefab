@@ -11531,13 +11531,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myPV: {fileID: 3652908554095899022}
   myPTV: {fileID: 369763305365178457}
-  speed: 8
-  jumpSpeed: 8
-  slideSpeed: 10
+  speed: 4
+  jumpSpeed: 6
+  slideSpeed: 8
   rotateSpeed: 10
   gravity: 20
   velocity: {x: 0, y: 0, z: 0}
   pushPrefab: {fileID: 757498408050532993, guid: d9fcdbc8814c11d478b6a6396d2dbc24, type: 3}
+  isDamage: 0
 --- !u!114 &-5902158392512510695
 MonoBehaviour:
   m_ObjectHideFlags: 0

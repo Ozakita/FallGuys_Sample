@@ -19,8 +19,8 @@ public class CameraScript : MonoBehaviour
     //カメラ回転用係数(値が大きいほど回転速度が上がる)
     [SerializeField] private float moveX = 1.0f;     // カメラX方向回転係数
     [SerializeField] private float moveY = 0.5f;     // カメラY方向回転係数
-    private const float YAngle_MIN = -80.0f;   //カメラのY方向の最小角度
-    private const float YAngle_MAX = 30.0f;    //カメラのY方向の最大角度
+    private const float YAngle_MIN = -50.0f;   //カメラのY方向の最小角度
+    private const float YAngle_MAX = 0.0f;    //カメラのY方向の最大角度
 
     // Rayの判定に用いるLayer
     [SerializeField] private LayerMask layerMask = default;

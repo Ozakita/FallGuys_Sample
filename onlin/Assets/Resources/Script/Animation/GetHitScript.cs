@@ -11,23 +11,20 @@ public class GetHitScript : StateMachineBehaviour
     {
         // CharacterControlScriptを取得
         controller = animator.GetComponent<CharacterControlScript>();
-        // 移動量を初期化
-        //controller.velocity.x = 0.0f;
-        //controller.velocity.z = 0.0f;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        // 移動量を初期化
-        //controller.velocity.x = 0.0f;
-        //controller.velocity.z = 0.0f;
-    }
+    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        // ダメージのトリガーをオフ
         animator.ResetTrigger("Damage");
+        // ダメージフラグをオフ
+        controller.isDamage = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

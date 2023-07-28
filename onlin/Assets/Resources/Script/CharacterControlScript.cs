@@ -30,6 +30,9 @@ public class CharacterControlScript : MonoBehaviour
     public GameObject pushPrefab;
     private bool isPush = false;
 
+    // Damage用(ダメージモーション中)
+    public bool isDamage = false;
+
     // 初期化
     void Start()
     {
@@ -92,6 +95,10 @@ public class CharacterControlScript : MonoBehaviour
     // 旋回処理
     void RotationControl()
     {
+        // ダメージ状態の場合
+        if (isDamage)
+            return;
+
         Vector3 rotateDirection = velocity;
         rotateDirection.y = 0;
 
@@ -165,6 +172,7 @@ public class CharacterControlScript : MonoBehaviour
         if (!myPV.isMine)
             return;
 
+        // 衝突処理
         OnCollide(other);
 
         // Push判定の生成者
@@ -175,8 +183,10 @@ public class CharacterControlScript : MonoBehaviour
             return;
         // ダメージ状態へ遷移
         animator.SetTrigger("Damage");
+        // ダメージフラグをオン
+        isDamage = true;
         // ノックバックする
-        velocity = -other.transform.forward * 0.5f;
+        velocity = other.transform.forward * 2.0f;
     }
 
     // 衝突処理
