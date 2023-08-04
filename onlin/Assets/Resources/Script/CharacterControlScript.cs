@@ -30,6 +30,9 @@ public class CharacterControlScript : MonoBehaviour
     public GameObject pushPrefab;
     private bool isPush = false;
 
+    //吹っ飛び床用のGameObject
+    public GameObject FlyingFloor;
+
     // Damage用(ダメージモーション中)
     public bool isDamage = false;
 
@@ -179,14 +182,22 @@ public class CharacterControlScript : MonoBehaviour
         PhotonPlayer player = other.GetComponent<PushManagerScript>().player;
 
         // 自分が生成したもの、または衝突したものがPush判定以外の場合
-        if (player.IsLocal || !other.CompareTag("Push"))
+        if (player.IsLocal)
             return;
-        // ダメージ状態へ遷移
-        animator.SetTrigger("Damage");
-        // ダメージフラグをオン
-        isDamage = true;
-        // ノックバックする
-        velocity = other.transform.forward * 2.0f;
+        if (other.CompareTag("Push"))
+        {
+            // ダメージ状態へ遷移
+            animator.SetTrigger("Damage");
+            // ダメージフラグをオン
+            isDamage = true;
+            // ノックバックする
+            velocity = other.transform.forward * 2.0f;
+        }
+        if (!other.CompareTag("FlyingFloor"))
+        {
+            Debug.Log("衝突");
+            velocity = other.transform.forward * 2.0f;
+        }
     }
 
     // 衝突処理
