@@ -20,6 +20,7 @@ public class CharacterControlScript : MonoBehaviour
     public float slideSpeed;    // スライディング力
     public float rotateSpeed;   // 回転速度
     public float gravity;       // 重力
+    public float knockBack;     // ノックバックの距離
 
     // 移動処理に必要なベクトル
     public Vector3 velocity;    // 移動量
@@ -181,6 +182,11 @@ public class CharacterControlScript : MonoBehaviour
         // Push判定の生成者
         PhotonPlayer player = other.GetComponent<PushManagerScript>().player;
 
+        if (other.CompareTag("FlyingFloor"))
+        {
+            // ノックバックする
+            velocity = other.transform.forward * 6.0f;
+        }
         // 自分が生成したもの、または衝突したものがPush判定以外の場合
         if (player.IsLocal)
             return;
@@ -191,12 +197,7 @@ public class CharacterControlScript : MonoBehaviour
             // ダメージフラグをオン
             isDamage = true;
             // ノックバックする
-            velocity = other.transform.forward * 2.0f;
-        }
-        if (!other.CompareTag("FlyingFloor"))
-        {
-            Debug.Log("衝突");
-            velocity = other.transform.forward * 2.0f;
+            velocity = other.transform.forward * knockBack;
         }
     }
 

@@ -11536,8 +11536,10 @@ MonoBehaviour:
   slideSpeed: 8
   rotateSpeed: 10
   gravity: 20
+  knockBack: 6
   velocity: {x: 0, y: 0, z: 0}
   pushPrefab: {fileID: 757498408050532993, guid: d9fcdbc8814c11d478b6a6396d2dbc24, type: 3}
+  FlyingFloor: {fileID: 0}
   isDamage: 0
 --- !u!114 &-5902158392512510695
 MonoBehaviour:
