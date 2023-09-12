@@ -6,7 +6,7 @@ using System;
 public class PlayerCharacter : CharacterBase
 {
     [SerializeField, Header("オンラインにするかどうか")]
-    public bool isOnline = false;
+    //public bool isOnline = true;
     // オンライン化に必要なコンポーネントを設定
     public PhotonView myPV;
     public PhotonTransformView myPTV;
@@ -24,7 +24,7 @@ public class PlayerCharacter : CharacterBase
     }
 
     // カメラ
-    private Camera playerCamera;
+    public Camera playerCamera;
 
     // パラメータ用変数
     [SerializeField, Header("移動速度")]
@@ -72,11 +72,9 @@ public class PlayerCharacter : CharacterBase
     // 開始処理
     override public void CharaStart()
     {
-#if isOnline
         // 自キャラではない場合   
         if (!myPV.isMine)
             return;
-#endif
 
         // カメラの設定
         playerCamera = Camera.main;
@@ -97,11 +95,9 @@ public class PlayerCharacter : CharacterBase
     // 更新処理
     override public void CharaUpdate()
     {
-#if isOnline
         // 自キャラではない場合   
         if (!myPV.isMine)
             return;
-#endif
 
         // ジャンプ開始
         if (Input.GetKeyDown(KeyCode.Space))
@@ -143,10 +139,8 @@ public class PlayerCharacter : CharacterBase
             velocity.y -= gravity * Time.deltaTime;
         }
 
-#if isOnline
         // 移動する（オンライン用）
         myPTV.SetSynchronizedValues(velocity * Time.deltaTime, 0);
-#endif
         // 移動する
         rigid.MovePosition(rigid.position + velocity * Time.deltaTime);
     }
@@ -346,18 +340,7 @@ public class PlayerCharacter : CharacterBase
     {
         // Pushフラグをオン
         isPush = true;
-#if isOnline
         StartCoroutine(_pushCollide(1f));
-#else
-        // 自身の中心位置
-        Vector3 center = transform.position + capsuleCollider.center;
-        // 生成位置
-        Vector3 position = center + transform.forward * pushObjectOffset;
-        // Pushオブジェクトを生成
-        Instantiate(pushObject, position, transform.rotation);
-        // Pushisフラグをオフ
-        isPush = false;
-#endif
     }
 
     IEnumerator _pushCollide(float pauseTime)
@@ -385,11 +368,10 @@ public class PlayerCharacter : CharacterBase
     // 被弾処理
     private void OnTriggerEnter(Collider other)
     {
-#if isOnline
         // 自キャラ以外なら処理しない
         if (!myPV.isMine)
             return;
-#endif
+
         // 衝突処理
         OnCollide(other);
 
@@ -402,13 +384,11 @@ public class PlayerCharacter : CharacterBase
 
         if (other.CompareTag("Push"))
         {
-#if isOnline
             // Push判定の生成者
             PhotonPlayer pushPlayer = other.GetComponent<PushManagerScript>().player;
             // 自分が生成したもの、または衝突したものがPush判定以外の場合
             if (pushPlayer.IsLocal)
                 return;
-#endif
             // ダメージ状態へ遷移
             animator.SetTrigger("Damage");
             // ダメージフラグをオン
