@@ -137,6 +137,12 @@ public class PlayerCharacter : CharacterBase
             stateTimer += Time.deltaTime;
         }
 
+        // 着地していない時は重力をかける
+        if (!check.isCollided())
+        {
+            velocity.y -= gravity * Time.deltaTime;
+        }
+
 #if isOnline
         // 移動する（オンライン用）
         myPTV.SetSynchronizedValues(velocity * Time.deltaTime, 0);
