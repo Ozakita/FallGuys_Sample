@@ -1,23 +1,23 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SphereCastCheck : MonoBehaviour
 {
-    // Ray‚Ì’·‚³
+    // Rayã®é•·ã•
     [SerializeField] private float rayLength = 1f;
-    // Ray‚ğ‚Ç‚ê‚­‚ç‚¢g‘Ì‚É‚ß‚è‚Ü‚¹‚é‚©
+    // Rayã‚’ã©ã‚Œãã‚‰ã„èº«ä½“ã«ã‚ã‚Šè¾¼ã¾ã›ã‚‹ã‹
     [SerializeField] private float rayOffset;
-    // Ray‚Ì”»’è‚É—p‚¢‚éLayer
+    // Rayã®åˆ¤å®šã«ç”¨ã„ã‚‹Layer
     [SerializeField] private LayerMask layerMask = default;
-    // Sphere‚Ì”¼Œa
+    // Sphereã®åŠå¾„
     [SerializeField] private float radius;
-    // Õ“Ëƒtƒ‰ƒO
+    // è¡çªãƒ•ãƒ©ã‚°
     private bool isCollide = false;
 
     private void FixedUpdate()
     {
-        // Õ“Ë”»’è
+        // è¡çªåˆ¤å®š
         isCollide = CheckGrounded();
     }
 
@@ -29,7 +29,7 @@ public class SphereCastCheck : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Õ“Ë”»’è‚Í—ÎAÕ“Ë‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚ÍÔ‚É‚·‚é
+        // è¡çªåˆ¤å®šæ™‚ã¯ç·‘ã€è¡çªã—ã¦ã„ãªã„ã¨ãã¯èµ¤ã«ã™ã‚‹
         Gizmos.color = isCollide ? Color.green : Color.red;
         Gizmos.DrawRay(transform.position + Vector3.up * rayOffset, -transform.up * rayLength);
         Gizmos.DrawWireSphere((transform.position + Vector3.up * rayOffset) - transform.up * rayLength, radius);

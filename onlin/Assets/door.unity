@@ -1938,7 +1938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df03a6949c22fd4488a51437017b8aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 8333059136277543434, guid: 5aeef2578c5bd3c459d12dae22b1f4ec, type: 3}
+  playerPrefab: {fileID: 895418843258082325, guid: d53435ccc2b450f408e63fe8fd5f9e71, type: 3}
   generatePosition: {x: 0, y: 3, z: 0}
 --- !u!4 &711887459
 Transform:
@@ -3109,7 +3109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 322655c8d0dbbe844b3e1bf8aa1942a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 8714229497413836976, guid: 5aeef2578c5bd3c459d12dae22b1f4ec, type: 3}
+  target: {fileID: 515374209961463471, guid: d53435ccc2b450f408e63fe8fd5f9e71, type: 3}
   offset: {x: 0, y: 1, z: 0}
   distance: 8
   distance_min: 1
