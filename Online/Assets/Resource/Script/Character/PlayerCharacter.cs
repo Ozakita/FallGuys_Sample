@@ -75,6 +75,8 @@ public class PlayerCharacter : CharacterBase
         //if (!myPV.isMine)
         //    return;
 
+        // カメラを取得
+        playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
         // カメラのターゲットに自身を設定
         playerCamera.GetComponent<CameraScript>().target = this.gameObject.transform;
         // 状態クラスを生成

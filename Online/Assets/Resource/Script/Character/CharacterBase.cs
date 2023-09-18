@@ -25,7 +25,7 @@ public abstract class CharacterBase : MonoBehaviour
 
     // 必要なコンポーネント
     [SerializeField]
-    protected Animator animator;
+    public Animator animator;
     [SerializeField]
     protected CapsuleCollider capsuleCollider;
     [SerializeField]
