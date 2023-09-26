@@ -11565,7 +11565,8 @@ MonoBehaviour:
   capsuleCollider: {fileID: 4813731979847256607}
   rigid: {fileID: 2873205869307169910}
   check: {fileID: 5177319234844190547}
-  playerCamera: {fileID: 0}
+  playerCamera: {fileID: 8228416707584301589, guid: bbae660fa1ce7714886e17d1bfe1eac8, type: 3}
+  input: {fileID: 529864352610137113, guid: 620df198bb4ccf04b985614790e8c71d, type: 3}
   moveSpeed: 4
   jumpSpeed: 6
   slideSpeed: 8

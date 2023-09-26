@@ -5,12 +5,12 @@ using UnityEngine;
 public class InputControl : MonoBehaviour
 {
     // インスタンス
-    public static InputControl Instance { get; private set; }
+    //public static InputControl Instance { get; private set; }
 
     // 開始
     void Start()
     {
-        Instance = this;
+        //Instance = this;
     }
 
     // 更新

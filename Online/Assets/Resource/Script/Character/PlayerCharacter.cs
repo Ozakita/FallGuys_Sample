@@ -25,6 +25,7 @@ public class PlayerCharacter : CharacterBase
     [SerializeField]
     private Camera playerCamera;
     // 入力
+    [SerializeField]
     private InputControl input;
 
     // パラメータ用変数
@@ -78,11 +79,14 @@ public class PlayerCharacter : CharacterBase
         //    return;
 
         // カメラを取得
-        playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
+        //playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
         // カメラのターゲットに自身を設定
         playerCamera.GetComponent<CameraScript>().target = this.gameObject.transform;
+        Instantiate(playerCamera, transform);
+
         // 入力のインスタンスを取得
-        input = InputControl.Instance;
+        //input = InputControl.Instance;
+        //input = GameObject.Find("InputControl").GetComponent<InputControl>();
         // 状態クラスを生成
         state = new State();
 
