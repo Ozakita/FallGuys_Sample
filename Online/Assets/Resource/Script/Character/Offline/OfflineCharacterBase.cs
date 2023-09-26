@@ -1,30 +1,29 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Fusion;
 
-// ƒLƒƒƒ‰ƒNƒ^[Šî’êƒNƒ‰ƒX
-public abstract class CharacterBase : NetworkBehaviour
+// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼åŸºåº•ã‚¯ãƒ©ã‚¹(ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ç”¨)
+public abstract class OfflineCharacterBase : MonoBehaviour
 {
-    // ó‘ÔƒNƒ‰ƒX
+    // çŠ¶æ…‹ã‚¯ãƒ©ã‚¹
     protected class State
     {
-        // ó‘Ô
+        // çŠ¶æ…‹
         public const int Idle = 0;
         public const int Move = 1;
 
-        // Œ»İ‚Ìó‘Ô
+        // ç¾åœ¨ã®çŠ¶æ…‹
         public int current = Idle;
     }
     protected State state;
 
-    // ó‘Ô‚ÌXV
+    // çŠ¶æ…‹ã®æ›´æ–°
     protected delegate void UpdateState();
     protected UpdateState updateState;
-    // ó‘Ôƒ^ƒCƒ}[
+    // çŠ¶æ…‹ã‚¿ã‚¤ãƒãƒ¼
     protected float stateTimer = 0.0f;
 
-    // •K—v‚ÈƒRƒ“ƒ|[ƒlƒ“ƒg
+    // å¿…è¦ãªã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
     [SerializeField]
     public Animator animator;
     [SerializeField]
@@ -34,13 +33,13 @@ public abstract class CharacterBase : NetworkBehaviour
     [SerializeField]
     protected SphereCastCheck check;
 
-    // ƒLƒƒƒ‰ƒNƒ^[‚ÌŠJnˆ—
+    // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®é–‹å§‹å‡¦ç†
     public abstract void CharaStart();
 
-    // ƒLƒƒƒ‰ƒNƒ^[‚ÌXVˆ—
+    // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®æ›´æ–°å‡¦ç†
     public abstract void CharaUpdate();
 
-    // Œ»İ‚Ìó‘ÔŠÔ‚Ì’·‚³‚ğæ“¾
+    // ç¾åœ¨ã®çŠ¶æ…‹æ™‚é–“ã®é•·ã•ã‚’å–å¾—
     protected float StateTimeLength()
     {
         return animator.GetCurrentAnimatorStateInfo(0).length;

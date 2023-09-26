@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerCharacter : CharacterBase
+public class OfflinePlayerCharacter : OfflineCharacterBase
 {
     // オンライン化に必要なコンポーネントを設定
     //public PhotonView myPV;
     //public PhotonTransformView myPTV;
 
     // 状態クラス
-    private new class State : CharacterBase.State
+    private new class State : OfflineCharacterBase.State
     {
         // 状態
         public const int JumpStart = 2;
@@ -25,6 +25,7 @@ public class PlayerCharacter : CharacterBase
     [SerializeField]
     private Camera playerCamera;
     // 入力
+    [SerializeField]
     private InputControl input;
 
     // パラメータ用変数
@@ -82,7 +83,7 @@ public class PlayerCharacter : CharacterBase
         // カメラのターゲットに自身を設定
         playerCamera.GetComponent<CameraScript>().target = this.gameObject.transform;
         // 入力のインスタンスを取得
-        input = InputControl.Instance;
+        //input = InputControl.Instance;
         // 状態クラスを生成
         state = new State();
 
