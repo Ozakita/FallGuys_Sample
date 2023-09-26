@@ -78,6 +78,9 @@ public class PlayerCharacter : CharacterBase
         //if (!myPV.isMine)
         //    return;
 
+        if (!Object.HasStateAuthority)
+            return;
+
         // カメラを取得
         //playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
         // カメラのターゲットに自身を設定
@@ -105,6 +108,9 @@ public class PlayerCharacter : CharacterBase
         // 自キャラではない場合   
         //if (!myPV.isMine)
         //    return;
+
+        if (!Object.HasStateAuthority)
+            return;
 
         // ジャンプ開始
         if (input.IsJump())
