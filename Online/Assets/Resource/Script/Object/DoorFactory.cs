@@ -36,6 +36,8 @@ public class DoorFactory : MonoBehaviour
     void Start()
     {
         Instance = this;
+
+        SetDoor();
     }
 
     // 更新
@@ -55,16 +57,24 @@ public class DoorFactory : MonoBehaviour
             for (int j = 0; j < doorTableArray[i].allCount; ++j)
             {
                 // 間隔をあける
-                pos.z += j * doorTableArray[i].offset;
+                pos.x = j * doorTableArray[i].offset;
 
                 // 配置するドア番号を取得
                 int[] doorNum = SetDoorNumber(doorTableArray[i].doorCount, doorTableArray[i].allCount);
 
-                
-
-
-                // 生成する
-                Instantiate(doorPrefab, pos, Quaternion.identity);
+                for (int k = 0; k < doorNum.Length; ++k)
+                {
+                    if (doorNum[k] == j)
+                    {
+                        // 生成する
+                        Instantiate(doorPrefab, pos, Quaternion.identity);
+                    }
+                    else
+                    {
+                        // 生成する
+                        Instantiate(fakeDoorPrefab, pos, Quaternion.identity);
+                    }
+                }
             }
         }
     }
@@ -84,7 +94,7 @@ public class DoorFactory : MonoBehaviour
         }
 
         // 配置番号を決定する
-        for (int i = 0; i < count;)
+        for (int i = 0; i < count; ++i)
         {
             // ランダムで配列から番号を取得
             int random = UnityEngine.Random.Range(0, num.Count);

@@ -16,7 +16,11 @@ public class PlayerMeshSelect : MonoBehaviour
     private OptionalMeshParts headParts;
     private OptionalMeshParts tails;
 
-    void Start()
+    void Start() {}
+    void Update() {}
+
+    // 開始処理
+    public void OwnStart()
     {
         // パーツのスクリプトをセット
         SetPartsScript();
@@ -24,7 +28,8 @@ public class PlayerMeshSelect : MonoBehaviour
         FindParts();
     }
 
-    void Update()
+    // 更新処理
+    public void OwnUpdate()
     {
         // デバッグ用
         if (Input.GetKeyDown(KeyCode.Alpha1)) bodies.OwnUpdate();

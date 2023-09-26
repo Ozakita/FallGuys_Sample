@@ -97,6 +97,6 @@ MonoBehaviour:
   moveY: 0.5
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   radius: 0
   isCollideEnable: 0

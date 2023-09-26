@@ -462,7 +462,7 @@ Transform:
   m_GameObject: {fileID: 1647397714}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 1, z: 20}
+  m_LocalScale: {x: 5, y: 1, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -497,13 +497,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3aafd69f2ace87429f54fda0dbb6cec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorPrefab: {fileID: 0}
-  fakeDoorPrefab: {fileID: 0}
+  doorPrefab: {fileID: 6838279622251130031, guid: 5206734c4611a464890c00096e940dc9, type: 3}
+  fakeDoorPrefab: {fileID: 5113345406176309008, guid: 1f1a474797c11314b8f8b152f6f491bf, type: 3}
   doorTableArray:
-  - position: {x: 0, y: 0, z: 0}
-    offset: 0
-    allCount: 0
-    doorCount: 0
+  - position: {x: 0, y: 1.5, z: 0}
+    offset: 3
+    allCount: 4
+    doorCount: 1
 --- !u!4 &1887904979
 Transform:
   m_ObjectHideFlags: 0
@@ -540,7 +540,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 908542665667820291, guid: 286d99c09ea9da9488458d1cc39791f8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 908542665667820291, guid: 286d99c09ea9da9488458d1cc39791f8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -570,6 +570,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4013827703757366863, guid: 286d99c09ea9da9488458d1cc39791f8, type: 3}
+      propertyPath: input
+      value: 
+      objectReference: {fileID: 814497511}
     - target: {fileID: 5950477652868334283, guid: 286d99c09ea9da9488458d1cc39791f8, type: 3}
       propertyPath: m_Name
       value: PlayerCharacter

@@ -5,10 +5,6 @@ using System;
 
 public class PlayerCharacter : CharacterBase
 {
-    // オンライン化に必要なコンポーネントを設定
-    //public PhotonView myPV;
-    //public PhotonTransformView myPTV;
-
     // 状態クラス
     private new class State : CharacterBase.State
     {
@@ -27,6 +23,8 @@ public class PlayerCharacter : CharacterBase
     // 入力
     [SerializeField]
     private InputControl input;
+    // メッシュ選択
+    private PlayerMeshSelect mesh;
 
     // パラメータ用変数
     [SerializeField, Header("移動速度")]
@@ -74,22 +72,24 @@ public class PlayerCharacter : CharacterBase
     // 開始処理
     override public void CharaStart()
     {
-        // 自キャラではない場合   
-        //if (!myPV.isMine)
-        //    return;
-
+        // 自キャラではない場合  
         if (!Object.HasStateAuthority)
             return;
 
         // カメラを取得
-        //playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
+        playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
         // カメラのターゲットに自身を設定
         playerCamera.GetComponent<CameraScript>().target = this.gameObject.transform;
-        Instantiate(playerCamera, transform);
 
         // 入力のインスタンスを取得
         //input = InputControl.Instance;
         //input = GameObject.Find("InputControl").GetComponent<InputControl>();
+
+        // メッシュ選択を取得
+        mesh = GetComponent<PlayerMeshSelect>();
+        // メッシュの開始処理
+        mesh.OwnStart();
+
         // 状態クラスを生成
         state = new State();
 
@@ -106,9 +106,6 @@ public class PlayerCharacter : CharacterBase
     override public void CharaUpdate()
     {
         // 自キャラではない場合   
-        //if (!myPV.isMine)
-        //    return;
-
         if (!Object.HasStateAuthority)
             return;
 
@@ -152,10 +149,11 @@ public class PlayerCharacter : CharacterBase
             velocity.y -= gravity * Time.deltaTime;
         }
 
-        // 移動する（オンライン用）
-        //myPTV.SetSynchronizedValues(velocity * Time.deltaTime, 0);
         // 移動する
         rigid.MovePosition(rigid.position + velocity * Time.deltaTime);
+
+        // メッシュの更新処理
+        mesh.OwnUpdate();
     }
 
     // 移動方向を取得
@@ -169,8 +167,8 @@ public class PlayerCharacter : CharacterBase
         right.y = 0.0f;
 
         // 移動の入力
-        move.x = Input.GetAxis("Horizontal");
-        move.z = Input.GetAxis("Vertical");
+        move.x = Input.GetAxisRaw("Horizontal");
+        move.z = Input.GetAxisRaw("Vertical");
 
         // 移動方向を計算
         return move.x * right + move.z * forward;
@@ -212,7 +210,6 @@ public class PlayerCharacter : CharacterBase
         }
 
         // アニメーションの再生 
-        //animator.Play(animationName, 0, 0.0f);
         animator.CrossFade(animationName, 0.0f, 0);
     }
 
