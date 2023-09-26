@@ -16,11 +16,6 @@ public class PlayerMeshSelect : MonoBehaviour
     private OptionalMeshParts headParts;
     private OptionalMeshParts tails;
 
-    public bool isBodyParts;
-    public bool isGloves;
-    public bool isHeadParts;
-    public bool isTails;
-
     void Start()
     {
         // パーツのスクリプトをセット
@@ -31,6 +26,7 @@ public class PlayerMeshSelect : MonoBehaviour
 
     void Update()
     {
+        // デバッグ用
         if (Input.GetKeyDown(KeyCode.Alpha1)) bodies.OwnUpdate();
         if (Input.GetKeyDown(KeyCode.Alpha2)) eyes.OwnUpdate();
         if (Input.GetKeyDown(KeyCode.Alpha3)) mouthAndNoses.OwnUpdate();
@@ -39,11 +35,6 @@ public class PlayerMeshSelect : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha5)) gloves.OwnUpdate();
         if (Input.GetKeyDown(KeyCode.Alpha6)) headParts.OwnUpdate();
         if (Input.GetKeyDown(KeyCode.Alpha7)) tails.OwnUpdate();
-
-        bodyParts.SetEnable(isBodyParts);
-        gloves.SetEnable(isGloves);
-        headParts.SetEnable(isHeadParts);
-        tails.SetEnable(isTails);
     }
 
     // パーツのスクリプトをセット

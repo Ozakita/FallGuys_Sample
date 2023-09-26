@@ -1,86 +1,82 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CameraScript : MonoBehaviour
 {
-    public Transform target;    //’ÇÕ‚·‚éƒIƒuƒWƒFƒNƒg‚Ìtransform
-    public Vector3 offset;      //’ÇÕ‘ÎÛ‚Ì’†SˆÊ’u’²®—pƒIƒtƒZƒbƒg
-    private Vector3 lookAt;     //target‚Æoffset‚É‚æ‚é’‹‚·‚éÀ•W
+    public Transform target;    //è¿½è·¡ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®transform
+    public Vector3 offset;      //è¿½è·¡å¯¾è±¡ã®ä¸­å¿ƒä½ç½®èª¿æ•´ç”¨ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+    private Vector3 lookAt;     //targetã¨offsetã«ã‚ˆã‚‹æ³¨è¦–ã™ã‚‹åº§æ¨™
 
-    // ƒ^[ƒQƒbƒg‚ÆƒJƒƒ‰ŠÔ‚Ì‹——£
+    // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ã‚«ãƒ¡ãƒ©é–“ã®è·é›¢
     [SerializeField] private float distance = 8.0f;
     [SerializeField] private float distance_min = 1.0f;
     [SerializeField] private float distance_max = 10.0f;
 
-    // ƒJƒƒ‰‚ğ‰ñ“]‚³‚¹‚éŠp“x
+    // ã‚«ãƒ¡ãƒ©ã‚’å›è»¢ã•ã›ã‚‹è§’åº¦
     private Vector2 current = new Vector2(0, 0);
-    //ƒJƒƒ‰‰ñ“]—pŒW”(’l‚ª‘å‚«‚¢‚Ù‚Ç‰ñ“]‘¬“x‚ªã‚ª‚é)
-    [SerializeField] private float moveX = 1.0f;     // ƒJƒƒ‰X•ûŒü‰ñ“]ŒW”
-    [SerializeField] private float moveY = 0.5f;     // ƒJƒƒ‰Y•ûŒü‰ñ“]ŒW”
-    private const float YAngle_MIN = -50.0f;   //ƒJƒƒ‰‚ÌY•ûŒü‚ÌÅ¬Šp“x
-    private const float YAngle_MAX = 0.0f;    //ƒJƒƒ‰‚ÌY•ûŒü‚ÌÅ‘åŠp“x
+    //ã‚«ãƒ¡ãƒ©å›è»¢ç”¨ä¿‚æ•°(å€¤ãŒå¤§ãã„ã»ã©å›è»¢é€Ÿåº¦ãŒä¸ŠãŒã‚‹)
+    [SerializeField] private float moveX = 1.0f;     // ã‚«ãƒ¡ãƒ©Xæ–¹å‘å›è»¢ä¿‚æ•°
+    [SerializeField] private float moveY = 0.5f;     // ã‚«ãƒ¡ãƒ©Yæ–¹å‘å›è»¢ä¿‚æ•°
+    private const float YAngle_MIN = -50.0f;   //ã‚«ãƒ¡ãƒ©ã®Yæ–¹å‘ã®æœ€å°è§’åº¦
+    private const float YAngle_MAX = 0.0f;    //ã‚«ãƒ¡ãƒ©ã®Yæ–¹å‘ã®æœ€å¤§è§’åº¦
 
-    // Ray‚Ì”»’è‚É—p‚¢‚éLayer
+    // Rayã®åˆ¤å®šã«ç”¨ã„ã‚‹Layer
     [SerializeField] private LayerMask layerMask = default;
-    // Sphere‚Ì”¼Œa
+    // Sphereã®åŠå¾„
     [SerializeField] private float radius;
-    // Õ“Ë‚ğ—LŒø‚É‚·‚é‚©H
+    // è¡çªã‚’æœ‰åŠ¹ã«ã™ã‚‹ã‹ï¼Ÿ
     [SerializeField] private bool isCollideEnable = false;
-    // Õ“Ëƒtƒ‰ƒO
+    // è¡çªãƒ•ãƒ©ã‚°
     private bool isCollide = false;
-    // Ray‚Å“–‚½‚Á‚½‚à‚Ì
+    // Rayã§å½“ãŸã£ãŸã‚‚ã®
     RaycastHit hit;
 
     void Update()
     {
-        // ƒJƒƒ‰ˆÊ’u‚ğƒŠƒZƒbƒg‚·‚éiƒvƒŒƒCƒ„[‚Ì‘O•ûŒü‚ğŒü‚­j
+        // ã‚«ãƒ¡ãƒ©ä½ç½®ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ï¼ˆãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‰æ–¹å‘ã‚’å‘ãï¼‰
         //if (Input.GetButtonDown("CameraReset"))
         //{
         //    transform.forward = target.forward;
         //    Debug.Log("Reset");
         //}
 
-        //ƒ}ƒEƒX‰EƒNƒŠƒbƒN‚ğ‰Ÿ‚µ‚Ä‚¢‚é‚Æ‚«‚¾‚¯ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚É‰‚¶‚ÄƒJƒƒ‰‚ª‰ñ“]
-        if (Input.GetMouseButton(1))
-        {
-            current.x += Input.GetAxis("Mouse X") * 4.0f;
-            current.y += Input.GetAxis("Mouse Y") * 2.0f;
-        }
-        //else
-        //{
-        //    current.x += Input.GetAxis("CameraYaw") * moveX;
-        //    current.y += Input.GetAxis("CameraPitch") * moveY;
-        //}
-        // ƒJƒƒ‰‚Ì‰ñ“]‚Ì§ŒÀ
+        // ãƒã‚¦ã‚¹ã®ç§»å‹•é‡ã«å¿œã˜ã¦ã‚«ãƒ¡ãƒ©ãŒå›è»¢
+        current.x += Input.GetAxis("Mouse X") * 4.0f;
+        current.y += Input.GetAxis("Mouse Y") * 2.0f;
+
+        //current.x += Input.GetAxis("CameraYaw") * moveX;
+        //current.y += Input.GetAxis("CameraPitch") * moveY;
+
+        // ã‚«ãƒ¡ãƒ©ã®å›è»¢ã®åˆ¶é™
         current.y = Mathf.Clamp(current.y, YAngle_MIN, YAngle_MAX);
-        // ƒ^[ƒQƒbƒg‚ÆƒJƒƒ‰‚Ì‹——£‚Ì§ŒÀ
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ã‚«ãƒ¡ãƒ©ã®è·é›¢ã®åˆ¶é™
         distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel"), distance_min, distance_max);
     }
     void LateUpdate()
     {
-        // ƒ^[ƒQƒbƒg‚ª‚¢‚È‚¢ê‡
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã„ãªã„å ´åˆ
         if (target == null)
             return;
 
-        // ’‹À•W‚ÍtargetˆÊ’u+offset‚ÌÀ•W
+        // æ³¨è¦–åº§æ¨™ã¯targetä½ç½®+offsetã®åº§æ¨™
         lookAt = target.position + offset;
 
-        //ƒJƒƒ‰ù‰ñˆ—
+        //ã‚«ãƒ¡ãƒ©æ—‹å›å‡¦ç†
         Vector3 dir = new Vector3(0, 0, -distance);
         Quaternion rotation = Quaternion.Euler(-current.y, current.x, 0);
 
-        // ƒJƒƒ‰‚ÌˆÊ’u‚ğ•ÏX
+        // ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã‚’å¤‰æ›´
         transform.position = lookAt + rotation * dir;
-        // ƒJƒƒ‰‚ğLookAt‚Ì•ûŒü‚ÉŒü‚¯‚³‚¹‚é
+        // ã‚«ãƒ¡ãƒ©ã‚’LookAtã®æ–¹å‘ã«å‘ã‘ã•ã›ã‚‹
         transform.LookAt(lookAt);
 
-        // Õ“Ë‚ª—LŒø‚©H
+        // è¡çªãŒæœ‰åŠ¹ã‹ï¼Ÿ
         if (!isCollideEnable)
             return;
 
-        // ƒJƒƒ‰‚Ì“–‚½‚è”»’èˆ—
+        // ã‚«ãƒ¡ãƒ©ã®å½“ãŸã‚Šåˆ¤å®šå‡¦ç†
         if (CheckCollide())
         {
             transform.position = hit.point;
@@ -94,21 +90,21 @@ public class CameraScript : MonoBehaviour
 
     private bool CheckCollide()
     {
-        // ƒ^[ƒQƒbƒg‚Ì•ûŒü‚ÌRay
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®æ–¹å‘ã®Ray
         Ray ray = new Ray(transform.position, transform.forward);
-        // ƒ^[ƒQƒbƒg‚ÆƒJƒƒ‰‚Ì‹——£
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ã‚«ãƒ¡ãƒ©ã®è·é›¢
         float distanceTarget = Vector3.Distance(transform.position, lookAt);
         return Physics.SphereCast(ray, radius, out hit, distanceTarget, layerMask);
     }
 
-    // Debug—p‚ÉRay‚ğ‰Â‹‰»‚·‚é
+    // Debugç”¨ã«Rayã‚’å¯è¦–åŒ–ã™ã‚‹
     private void OnDrawGizmos()
     {
-        // Õ“Ë‚ª—LŒø‚©H
+        // è¡çªãŒæœ‰åŠ¹ã‹ï¼Ÿ
         if (!isCollideEnable)
             return;
 
-        // Ú’n”»’è‚Í—ÎA‹ó’†‚É‚¢‚é‚Æ‚«‚ÍÔ‚É‚·‚é
+        // æ¥åœ°åˆ¤å®šæ™‚ã¯ç·‘ã€ç©ºä¸­ã«ã„ã‚‹ã¨ãã¯èµ¤ã«ã™ã‚‹
         Gizmos.color = isCollide ? Color.green : Color.red;
         float distanceTarget = Vector3.Distance(transform.position, lookAt);
         Gizmos.DrawRay(transform.position, transform.forward * distanceTarget);

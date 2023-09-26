@@ -5,24 +5,22 @@ using UnityEngine.Assertions;
 
 public class OptionalMeshParts : MonoBehaviour
 {
-    // 使用するか？
-    private bool isEnable = false;
     // パーツ
     public GameObject parts;
     // 使用するインデックス
-    public int useIndex = 0;
+    public int useIndex = -1;
 
     void Start() {}
 
     void Update() {}
 
     // 自身の開始
-    public void OwnStart(int index, bool enable)
+    public void OwnStart(int index)
     {
         // 使用パーツを設定
         useIndex = index;
-        // 使用するか設定
-        SetEnable(enable);
+        // パーツを変更
+        ChangeParts(IsEnable());
     }
 
     // 自身の更新
@@ -32,28 +30,15 @@ public class OptionalMeshParts : MonoBehaviour
         useIndex++;
         // 次のパーツが範囲外なら初期化
         if (useIndex >= PartsCount())
-            useIndex = 0;
+            useIndex = -1;
 
         // パーツを変更
-        ChangeParts();
-    }
-
-    // 使用するか設定する
-    public void SetEnable(bool enable)
-    {
-        isEnable = enable;
-        // 使用しない場合はスキップする
-        if (!isEnable)
-            return;
-        // パーツを変更
-        ChangeParts();
+        ChangeParts(IsEnable());
     }
 
     // パーツを変更
-    private void ChangeParts()
+    private void ChangeParts(bool isEnable)
     {
-        Assert.IsTrue(IsRange(), "パーツの配列範囲外を指定しています。");
-
         // パーツ変更処理
         for (int i = 0; i < PartsCount(); ++i)
         {
@@ -74,6 +59,16 @@ public class OptionalMeshParts : MonoBehaviour
 
     // 範囲内かどうか？
     private bool IsRange()
+    {
+        if (useIndex < 0)
+            return false;
+        if (useIndex >= PartsCount())
+            return false;
+        return true;
+    }
+
+    // 有効にするか？
+    private bool IsEnable()
     {
         if (useIndex < 0)
             return false;
