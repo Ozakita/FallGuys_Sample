@@ -66,29 +66,21 @@ public class PlayerCharacter : CharacterBase
     private void Start()
     {
         CharaStart();
+        OwnStart();
     }
 
     // 一旦ここで更新処理
     private void Update()
     {
+        OwnUpdate();
         CharaUpdate();
     }
 
     // 開始処理
     override public void CharaStart()
     {
-        // 自キャラではない場合  
-        if (!Object.HasStateAuthority)
-            return;
-
         // カメラを取得
         playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
-        // カメラのターゲットに自身を設定
-        playerCamera.GetComponent<CameraScript>().target = this.gameObject.transform;
-
-        // 入力のインスタンスを取得
-        //input = InputControl.Instance;
-        //input = GameObject.Find("InputControl").GetComponent<InputControl>();
 
         // メッシュ選択を取得
         mesh = GetComponent<PlayerMeshSelect>();
@@ -98,17 +90,48 @@ public class PlayerCharacter : CharacterBase
         // 状態クラスを生成
         state = new State();
 
-        // 移動量の初期化
-        velocity = Vector3.zero;
-        // 移動入力の初期化
-        move = Vector3.zero;
-
         // アニメーションの再生 
         ChangeState(State.Idle, "Idle03");
     }
 
+    // 自身の開始処理
+    private void OwnStart()
+    {
+        // 自キャラではない場合  
+        if (!Object.HasStateAuthority)
+            return;
+
+        // カメラのターゲットに自身を設定
+        playerCamera.GetComponent<CameraScript>().target = this.gameObject.transform;
+
+        // 入力のインスタンスを取得
+        //input = InputControl.Instance;
+        //input = GameObject.Find("InputControl").GetComponent<InputControl>();
+
+        // 移動量の初期化
+        velocity = Vector3.zero;
+        // 移動入力の初期化
+        move = Vector3.zero;
+    }
+
     // 更新処理
     override public void CharaUpdate()
+    {
+        // 状態の更新
+        if (updateState != null)
+        {
+            updateState();
+            stateTimer += Time.deltaTime;
+        }
+        // メッシュの更新処理
+        mesh.OwnUpdate();
+
+        // プレイヤー名をカメラ正面に向ける
+        NameLookAtCamera();
+    }
+
+    // 自身の更新
+    private void OwnUpdate()
     {
         // 自キャラではない場合   
         if (!Object.HasStateAuthority)
@@ -141,13 +164,6 @@ public class PlayerCharacter : CharacterBase
             return;
         }
 
-        // 状態の更新
-        if (updateState != null)
-        {
-            updateState();
-            stateTimer += Time.deltaTime;
-        }
-
         // 着地していない時は重力をかける
         if (!check.isCollided())
         {
@@ -156,12 +172,6 @@ public class PlayerCharacter : CharacterBase
 
         // 移動する
         rigid.MovePosition(rigid.position + velocity * Time.deltaTime);
-
-        // メッシュの更新処理
-        mesh.OwnUpdate();
-
-        // プレイヤー名をカメラ正面に向ける
-        NameLookAtCamera();
     }
 
     // 移動方向を取得
