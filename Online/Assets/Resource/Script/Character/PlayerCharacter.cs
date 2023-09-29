@@ -82,7 +82,7 @@ public class PlayerCharacter : CharacterBase
             return;
 
         // カメラを取得
-        playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
+        playerCamera = transform.Find("PlayerCamera").GetComponent<Camera>();
         // カメラのターゲットに自身を設定
         playerCamera.GetComponent<CameraScript>().target = this.gameObject.transform;
 
