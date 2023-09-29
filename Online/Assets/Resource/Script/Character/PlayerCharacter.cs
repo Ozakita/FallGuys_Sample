@@ -65,6 +65,7 @@ public class PlayerCharacter : CharacterBase
     // 一旦ここで開始処理
     private void Start()
     {
+        SetUp();
         CharaStart();
     }
 
@@ -105,7 +106,7 @@ public class PlayerCharacter : CharacterBase
         move = Vector3.zero;
 
         // アニメーションの再生 
-        ChangeState(State.Idle, "Idle03");
+        ChangeState(State.Idle);
     }
 
     // 更新処理
@@ -118,35 +119,7 @@ public class PlayerCharacter : CharacterBase
         if (!Object.HasStateAuthority)
             return;
 
-        // ジャンプ開始
-        //if (input.IsJump())
-        //{
-        //    ChangeState(State.JumpStart, "JumpStart");
-        //    return;
-        //}
-        // スライディング
-        if (input.IsSlide())
-        {
-            //ChangeState(State.Slide, "Slide");
-
-            networkAnim.Animator.SetTrigger("Slide");
-
-            // xz成分の移動量を初期化
-            velocity.x = 0.0f;
-            velocity.z = 0.0f;
-            return;
-        }
-        // プッシュ
-        //if (input.IsPush() && check.isCollided() && !isPush)
-        //{
-        //    ChangeState(State.Push, "Push");
-        //    // Pushオブジェクトを生成
-        //    //PushGenerate();
-        //    // xz成分の移動量を初期化
-        //    velocity.x = 0.0f;
-        //    velocity.z = 0.0f;
-        //    return;
-        //}
+        Control();
 
         // 着地していない時は重力をかける
         if (!check.isCollided())
@@ -154,27 +127,55 @@ public class PlayerCharacter : CharacterBase
             velocity.y -= gravity * Time.deltaTime;
         }
 
-        // 移動量を設定
-        Vector3 moveVec = TargetDirection().normalized * move.magnitude * moveSpeed;
-        velocity.x = moveVec.x;
-        velocity.z = moveVec.z;
-
-        // 旋回制御
-        RotationControl();
-
-        networkAnim.Animator.SetFloat("Speed", TargetDirection().sqrMagnitude);
+        // アニメーションの変更
+        int nextState = GetAnimationState();
+        if (state.current != nextState)
+        {
+            ChangeState(nextState);
+        }
 
         // 状態の更新
-        //if (updateState != null)
-        //{
-        //    updateState();
-        //    stateTimer += Time.deltaTime;
-        //}
+        if (updateState != null)
+        {
+            updateState();
+            stateTimer += Time.deltaTime;
+        }
         // メッシュの更新処理
         mesh.OwnUpdate();
 
         // 移動する
         rigid.MovePosition(rigid.position + velocity * Time.deltaTime);
+    }
+
+    // 入力処理
+    private void Control()
+    {
+        // ジャンプ開始
+        if (input.IsJump())
+        {
+            animator.SetBool("Jump", true);
+            return;
+        }
+        // スライディング
+        if (input.IsSlide())
+        {
+            animator.SetTrigger("Slide");
+            // xz成分の移動量を初期化
+            velocity.x = 0.0f;
+            velocity.z = 0.0f;
+            return;
+        }
+        // プッシュ
+        if (input.IsPush() && check.isCollided() && !isPush)
+        {
+            animator.SetTrigger("Push");
+            // Pushオブジェクトを生成
+            //PushGenerate();
+            // xz成分の移動量を初期化
+            velocity.x = 0.0f;
+            velocity.z = 0.0f;
+            return;
+        }
     }
 
     // 移動方向を取得
@@ -210,7 +211,7 @@ public class PlayerCharacter : CharacterBase
     }
 
     // 状態を変更する
-    private void ChangeState(int nextState, string animationName)
+    private void ChangeState(int nextState/*, string animationName*/)
     {
         // タイマーの初期化
         stateTimer = 0.0f;
@@ -229,10 +230,6 @@ public class PlayerCharacter : CharacterBase
             case State.Slide: updateState = Slide; break;
             case State.Damage: updateState = Damage; break;
         }
-
-        // アニメーションの再生 
-        //animator.CrossFade(animationName, 0.0f, 0);
-        networkAnim.Animator.CrossFade(animationName, 0.0f, 0);
     }
 
     // 待機
@@ -243,7 +240,7 @@ public class PlayerCharacter : CharacterBase
             return;
 
         // 移動状態へ
-        ChangeState(State.Move, "Run01FWD");
+        animator.SetFloat("Move", 1f);
     }
 
     // 移動
@@ -252,7 +249,7 @@ public class PlayerCharacter : CharacterBase
         // 入力なしの場合は待機状態へ
         if (TargetDirection().sqrMagnitude <= 0.01f)
         {
-            ChangeState(State.Idle, "Idle03");
+            animator.SetFloat("Move", 0f);
             // 移動量を初期化
             velocity = Vector3.zero;
             return;
@@ -273,7 +270,8 @@ public class PlayerCharacter : CharacterBase
         // モーションが終了したらジャンプ中状態へ
         if (stateTimer > StateTimeLength())
         {
-            ChangeState(State.JumpAir, "JumpAir");
+            //ChangeState(State.JumpAir, "JumpAir");
+            animator.SetBool("Jump", true);
             return;
         }
 
@@ -287,7 +285,7 @@ public class PlayerCharacter : CharacterBase
         // 着地したらジャンプ終了状態へ
         if (check.isCollided())
         {
-            ChangeState(State.JumpEnd, "JumpEnd");
+            animator.SetBool("Jump", false);
             // 移動量を初期化
             velocity = Vector3.zero;
             return;
@@ -308,7 +306,6 @@ public class PlayerCharacter : CharacterBase
         // モーションが終了したら待機状態へ
         if (stateTimer > StateTimeLength())
         {
-            ChangeState(State.Idle, "Idle03");
             // 移動量を初期化
             velocity = Vector3.zero;
             return;
@@ -321,7 +318,6 @@ public class PlayerCharacter : CharacterBase
         // モーションが終了したら待機状態へ
         if (stateTimer > StateTimeLength())
         {
-            ChangeState(State.Idle, "Idle03");
             // 移動量を初期化
             velocity = Vector3.zero;
             return;
@@ -340,7 +336,6 @@ public class PlayerCharacter : CharacterBase
         // モーションが終了したら待機状態へ
         if (stateTimer > StateTimeLength())
         {
-            ChangeState(State.Idle, "Idle03");
             // 移動量を初期化
             velocity = Vector3.zero;
             return;
@@ -361,7 +356,6 @@ public class PlayerCharacter : CharacterBase
         // モーションが終了したら待機状態へ
         if (stateTimer > StateTimeLength())
         {
-            ChangeState(State.Idle, "Idle03");
             // 移動量を初期化
             velocity = Vector3.zero;
             return;
@@ -423,8 +417,7 @@ public class PlayerCharacter : CharacterBase
             //if (pushPlayer.IsLocal)
             //    return;
             // ダメージ状態へ遷移
-            //animator.SetTrigger("Damage");
-            networkAnim.Animator.SetTrigger("Damage");
+            animator.SetTrigger("Damage");
             // ダメージフラグをオン
             isDamage = true;
             // ノックバックする
@@ -461,5 +454,21 @@ public class PlayerCharacter : CharacterBase
     private void NameLookAtCamera()
     {
         playerName.transform.rotation = playerCamera.transform.rotation;
+    }
+
+    // 現在のアニメーション状態を検索
+    private int GetAnimationState()
+    {
+        AnimatorStateInfo animState = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (animState.IsName("Idle03")) return State.Idle;
+        if (animState.IsName("Run01FWD")) return State.Move;
+        if (animState.IsName("JumpStart")) return State.JumpStart;
+        if (animState.IsName("JumpAir")) return State.JumpAir;
+        if (animState.IsName("JumpEnd")) return State.JumpEnd;
+        if (animState.IsName("Push")) return State.Push;
+        if (animState.IsName("Slide")) return State.Slide;
+        if (animState.IsName("GetHit")) return State.Damage;
+        return State.Idle;
     }
 }

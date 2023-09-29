@@ -25,11 +25,9 @@ public abstract class CharacterBase : NetworkBehaviour
     protected float stateTimer = 0.0f;
 
     // 必要なコンポーネント
-    //[SerializeField]
-    //public Animator animator;
-
-    public NetworkMecanimAnimator networkAnim;
-
+    protected Animator animator;
+    [SerializeField]
+    protected NetworkMecanimAnimator networkAnim;
     [SerializeField]
     protected CapsuleCollider capsuleCollider;
     [SerializeField]
@@ -43,10 +41,15 @@ public abstract class CharacterBase : NetworkBehaviour
     // キャラクターの更新処理
     public abstract void CharaUpdate();
 
+    // セットアップ
+    protected void SetUp()
+    {
+        animator = networkAnim.Animator;
+    }
+
     // 現在の状態時間の長さを取得
     protected float StateTimeLength()
     {
-        //return animator.GetCurrentAnimatorStateInfo(0).length;
-        return networkAnim.Animator.GetCurrentAnimatorStateInfo(0).length;
+        return animator.GetCurrentAnimatorStateInfo(0).length;
     }
 }
