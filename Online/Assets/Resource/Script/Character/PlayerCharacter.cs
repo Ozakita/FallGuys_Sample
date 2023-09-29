@@ -24,14 +24,12 @@ public class PlayerCharacter : CharacterBase
     // 入力
     [SerializeField]
     private InputControl input;
-<<<<<<< Updated upstream
-    // メッシュ選択
-    private PlayerMeshSelect mesh;
-=======
     // プレイヤー名表示
     [SerializeField]
     private TextMeshPro playerName;
->>>>>>> Stashed changes
+
+    // メッシュ選択
+    private PlayerMeshSelect mesh;
 
     // パラメータ用変数
     [SerializeField, Header("移動速度")]
@@ -159,13 +157,11 @@ public class PlayerCharacter : CharacterBase
         // 移動する
         rigid.MovePosition(rigid.position + velocity * Time.deltaTime);
 
-<<<<<<< Updated upstream
         // メッシュの更新処理
         mesh.OwnUpdate();
-=======
+
         // プレイヤー名をカメラ正面に向ける
         NameLookAtCamera();
->>>>>>> Stashed changes
     }
 
     // 移動方向を取得
