@@ -66,13 +66,11 @@ public class PlayerCharacter : CharacterBase
     private void Start()
     {
         CharaStart();
-        OwnStart();
     }
 
     // 一旦ここで更新処理
     private void Update()
     {
-        OwnUpdate();
         CharaUpdate();
     }
 
@@ -82,21 +80,6 @@ public class PlayerCharacter : CharacterBase
         // カメラを取得
         playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
 
-        // メッシュ選択を取得
-        mesh = GetComponent<PlayerMeshSelect>();
-        // メッシュの開始処理
-        mesh.OwnStart();
-
-        // 状態クラスを生成
-        state = new State();
-
-        // アニメーションの再生 
-        ChangeState(State.Idle, "Idle03");
-    }
-
-    // 自身の開始処理
-    private void OwnStart()
-    {
         // 自キャラではない場合  
         if (!Object.HasStateAuthority)
             return;
@@ -108,31 +91,29 @@ public class PlayerCharacter : CharacterBase
         //input = InputControl.Instance;
         //input = GameObject.Find("InputControl").GetComponent<InputControl>();
 
+        // メッシュ選択を取得
+        mesh = GetComponent<PlayerMeshSelect>();
+        // メッシュの開始処理
+        mesh.OwnStart();
+
+        // 状態クラスを生成
+        state = new State();
+
         // 移動量の初期化
         velocity = Vector3.zero;
         // 移動入力の初期化
         move = Vector3.zero;
+
+        // アニメーションの再生 
+        ChangeState(State.Idle, "Idle03");
     }
 
     // 更新処理
     override public void CharaUpdate()
     {
-        // 状態の更新
-        if (updateState != null)
-        {
-            updateState();
-            stateTimer += Time.deltaTime;
-        }
-        // メッシュの更新処理
-        mesh.OwnUpdate();
-
         // プレイヤー名をカメラ正面に向ける
         NameLookAtCamera();
-    }
 
-    // 自身の更新
-    private void OwnUpdate()
-    {
         // 自キャラではない場合   
         if (!Object.HasStateAuthority)
             return;
@@ -169,6 +150,15 @@ public class PlayerCharacter : CharacterBase
         {
             velocity.y -= gravity * Time.deltaTime;
         }
+
+        // 状態の更新
+        if (updateState != null)
+        {
+            updateState();
+            stateTimer += Time.deltaTime;
+        }
+        // メッシュの更新処理
+        mesh.OwnUpdate();
 
         // 移動する
         rigid.MovePosition(rigid.position + velocity * Time.deltaTime);
@@ -228,7 +218,8 @@ public class PlayerCharacter : CharacterBase
         }
 
         // アニメーションの再生 
-        animator.CrossFade(animationName, 0.0f, 0);
+        //animator.CrossFade(animationName, 0.0f, 0);
+        networkAnim.Animator.CrossFade(animationName, 0.0f, 0);
     }
 
     // 待機
@@ -419,7 +410,8 @@ public class PlayerCharacter : CharacterBase
             //if (pushPlayer.IsLocal)
             //    return;
             // ダメージ状態へ遷移
-            animator.SetTrigger("Damage");
+            //animator.SetTrigger("Damage");
+            networkAnim.Animator.SetTrigger("Damage");
             // ダメージフラグをオン
             isDamage = true;
             // ノックバックする

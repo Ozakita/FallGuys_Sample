@@ -11622,6 +11622,7 @@ GameObject:
   - component: {fileID: 325547845548597572}
   - component: {fileID: 4803854899566239652}
   - component: {fileID: -25721415286287243}
+  - component: {fileID: 5127152500887692054}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -11734,7 +11735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  animator: {fileID: 3427927787343281485}
+  networkAnim: {fileID: 5127152500887692054}
   capsuleCollider: {fileID: 4813731979847256607}
   rigid: {fileID: 2873205869307169910}
   check: {fileID: 5177319234844190547}
@@ -11787,6 +11788,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 3784002835282936218}
   - {fileID: -25721415286287243}
+  - {fileID: 5127152500887692054}
   SimulationBehaviours: []
 --- !u!114 &-25721415286287243
 MonoBehaviour:
@@ -11816,6 +11818,36 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
+--- !u!114 &5127152500887692054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8230766273605467533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  Animator: {fileID: 3427927787343281485}
+  TotalWords: 0
+  SyncSettings: 79
+  FloatAccuracy:
+    _value: 0
+    _inverse: 0
+    _hash: -814817977
+  TimeAccuracy:
+    _value: 0
+    _inverse: 0
+    _hash: 1061325578
+  WeightAccuracy:
+    _value: 0
+    _inverse: 0
+    _hash: -814817977
+  StateHashes: 000000001f3d5daa5c936ea99e810ff81aa2d9175e2265e744b35f0db1afdc305a6c54cd525d0957d67edfb818d695eb9cf5430466c12eb3e48e62365ab908ff08e377d632edce8b7143fd88
+  TriggerHashes: 00000000
 --- !u!1 &8246363882514892100
 GameObject:
   m_ObjectHideFlags: 0
