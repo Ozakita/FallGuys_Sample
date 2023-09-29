@@ -132,6 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
+  nameLabel: {fileID: 0}
   distance: 6
   distance_min: 1
   distance_max: 8
@@ -149,6 +150,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 908542665667820291}
     m_Modifications:
+    - target: {fileID: 3113402482027063481, guid: 64e53774fa113cb45b020febadf3e6e0, type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 3302685524922459758}
     - target: {fileID: 8230766273605467533, guid: 64e53774fa113cb45b020febadf3e6e0, type: 3}
       propertyPath: m_Name
       value: OfflinePlayer

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using System;
 
 public class PlayerCharacter : CharacterBase
@@ -23,8 +24,14 @@ public class PlayerCharacter : CharacterBase
     // 入力
     [SerializeField]
     private InputControl input;
+<<<<<<< Updated upstream
     // メッシュ選択
     private PlayerMeshSelect mesh;
+=======
+    // プレイヤー名表示
+    [SerializeField]
+    private TextMeshPro playerName;
+>>>>>>> Stashed changes
 
     // パラメータ用変数
     [SerializeField, Header("移動速度")]
@@ -152,8 +159,13 @@ public class PlayerCharacter : CharacterBase
         // 移動する
         rigid.MovePosition(rigid.position + velocity * Time.deltaTime);
 
+<<<<<<< Updated upstream
         // メッシュの更新処理
         mesh.OwnUpdate();
+=======
+        // プレイヤー名をカメラ正面に向ける
+        NameLookAtCamera();
+>>>>>>> Stashed changes
     }
 
     // 移動方向を取得
@@ -432,5 +444,11 @@ public class PlayerCharacter : CharacterBase
         // 重なっている部分の半分の距離だけ離れる
         Vector3 leaveDistance = (position - target).normalized * overlap * 0.5f;
         transform.Translate(leaveDistance, Space.World);
+    }
+    
+    // プレイヤー名を正面に向ける
+    private void NameLookAtCamera()
+    {
+        playerName.transform.rotation = playerCamera.transform.rotation;
     }
 }

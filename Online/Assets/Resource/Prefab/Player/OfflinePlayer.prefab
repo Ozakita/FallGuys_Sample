@@ -11563,6 +11563,7 @@ MonoBehaviour:
   rigid: {fileID: 2873205869307169910}
   check: {fileID: 5177319234844190547}
   playerCamera: {fileID: 0}
+  input: {fileID: 0}
   moveSpeed: 4
   jumpSpeed: 6
   slideSpeed: 8

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 public class CameraScript : MonoBehaviour
@@ -8,6 +9,9 @@ public class CameraScript : MonoBehaviour
     public Transform target;    //追跡するオブジェクトのtransform
     public Vector3 offset;      //追跡対象の中心位置調整用オフセット
     private Vector3 lookAt;     //targetとoffsetによる注視する座標
+
+    // 自身の名前
+    [SerializeField] private TextMeshPro nameLabel;
 
     // ターゲットとカメラ間の距離
     [SerializeField] private float distance = 8.0f;
@@ -32,6 +36,11 @@ public class CameraScript : MonoBehaviour
     private bool isCollide = false;
     // Rayで当たったもの
     RaycastHit hit;
+
+    private void Start()
+    {
+        nameLabel = GetComponent<TextMeshPro>();
+    }
 
     void Update()
     {
