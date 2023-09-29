@@ -119,31 +119,34 @@ public class PlayerCharacter : CharacterBase
             return;
 
         // ジャンプ開始
-        if (input.IsJump())
-        {
-            ChangeState(State.JumpStart, "JumpStart");
-            return;
-        }
+        //if (input.IsJump())
+        //{
+        //    ChangeState(State.JumpStart, "JumpStart");
+        //    return;
+        //}
         // スライディング
         if (input.IsSlide())
         {
-            ChangeState(State.Slide, "Slide");
+            //ChangeState(State.Slide, "Slide");
+
+            networkAnim.Animator.SetTrigger("Slide");
+
             // xz成分の移動量を初期化
             velocity.x = 0.0f;
             velocity.z = 0.0f;
             return;
         }
         // プッシュ
-        if (input.IsPush() && check.isCollided() && !isPush)
-        {
-            ChangeState(State.Push, "Push");
-            // Pushオブジェクトを生成
-            //PushGenerate();
-            // xz成分の移動量を初期化
-            velocity.x = 0.0f;
-            velocity.z = 0.0f;
-            return;
-        }
+        //if (input.IsPush() && check.isCollided() && !isPush)
+        //{
+        //    ChangeState(State.Push, "Push");
+        //    // Pushオブジェクトを生成
+        //    //PushGenerate();
+        //    // xz成分の移動量を初期化
+        //    velocity.x = 0.0f;
+        //    velocity.z = 0.0f;
+        //    return;
+        //}
 
         // 着地していない時は重力をかける
         if (!check.isCollided())
@@ -151,12 +154,22 @@ public class PlayerCharacter : CharacterBase
             velocity.y -= gravity * Time.deltaTime;
         }
 
+        // 移動量を設定
+        Vector3 moveVec = TargetDirection().normalized * move.magnitude * moveSpeed;
+        velocity.x = moveVec.x;
+        velocity.z = moveVec.z;
+
+        // 旋回制御
+        RotationControl();
+
+        networkAnim.Animator.SetFloat("Speed", TargetDirection().sqrMagnitude);
+
         // 状態の更新
-        if (updateState != null)
-        {
-            updateState();
-            stateTimer += Time.deltaTime;
-        }
+        //if (updateState != null)
+        //{
+        //    updateState();
+        //    stateTimer += Time.deltaTime;
+        //}
         // メッシュの更新処理
         mesh.OwnUpdate();
 
