@@ -26,20 +26,15 @@ public class PlayerMeshSelect : MonoBehaviour
         SetPartsScript();
         // パーツを探す
         FindParts();
+
+        // メニューでのアバター設定を反映
+        bodies.OwnUpdate(PlayerData.CharacterData.meshPartsNum[0]);
     }
 
     // 更新処理
     public void OwnUpdate()
     {
-        // デバッグ用
-        if (Input.GetKeyDown(KeyCode.Alpha1)) bodies.OwnUpdate();
-        if (Input.GetKeyDown(KeyCode.Alpha2)) eyes.OwnUpdate();
-        if (Input.GetKeyDown(KeyCode.Alpha3)) mouthAndNoses.OwnUpdate();
-
-        if (Input.GetKeyDown(KeyCode.Alpha4)) bodyParts.OwnUpdate();
-        if (Input.GetKeyDown(KeyCode.Alpha5)) gloves.OwnUpdate();
-        if (Input.GetKeyDown(KeyCode.Alpha6)) headParts.OwnUpdate();
-        if (Input.GetKeyDown(KeyCode.Alpha7)) tails.OwnUpdate();
+        //bodies.OwnUpdate();
     }
 
     // パーツのスクリプトをセット

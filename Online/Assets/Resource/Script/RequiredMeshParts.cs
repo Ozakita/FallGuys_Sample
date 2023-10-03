@@ -24,10 +24,20 @@ public class RequiredMeshParts : MonoBehaviour
     }
 
     // 自身の更新
-    public void OwnUpdate()
+    // OPTIMIZE:入力なしを示すvalueのデフォルト値の管理方法
+    //          ここに記載？変数を用意すべき？
+    public void OwnUpdate(int value = -999)
     {
-        // 次のパーツ
-        useIndex++;
+        // 値の入力があればその値にする
+        if (value != -999)
+        {
+            useIndex = value;
+        }
+        else
+        {
+            // 次のパーツ、カウントアップ
+            useIndex++;
+        }
         // 次のパーツが範囲外なら初期化
         if (useIndex >= PartsCount()) 
             useIndex = 0;

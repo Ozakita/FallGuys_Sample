@@ -503,7 +503,7 @@ MonoBehaviour:
   - position: {x: 0, y: 1.5, z: 0}
     offset: 3
     allCount: 4
-    doorCount: 2
+    doorCount: 1
 --- !u!4 &1887904979
 Transform:
   m_ObjectHideFlags: 0

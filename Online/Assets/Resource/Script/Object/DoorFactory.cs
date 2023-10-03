@@ -36,12 +36,15 @@ public class DoorFactory : MonoBehaviour
     void Start()
     {
         Instance = this;
-        // ドアをセットする
+
         SetDoor();
     }
 
     // 更新
-    void Update() {}
+    void Update()
+    {
+        
+    }
 
     // ドアをセットする
     private void SetDoor()
@@ -50,21 +53,27 @@ public class DoorFactory : MonoBehaviour
         {
             // 生成位置
             Vector3 pos = doorTableArray[i].position;
-            // 配置するドア番号を取得
-            int[] doorNum = SetDoorNumber(doorTableArray[i].doorCount, doorTableArray[i].allCount);
 
             for (int j = 0; j < doorTableArray[i].allCount; ++j)
             {
                 // 間隔をあける
                 pos.x = j * doorTableArray[i].offset;
 
+                // 配置するドア番号を取得
+                int[] doorNum = SetDoorNumber(doorTableArray[i].doorCount, doorTableArray[i].allCount);
+
                 for (int k = 0; k < doorNum.Length; ++k)
                 {
-                    // 生成する
                     if (doorNum[k] == j)
+                    {
+                        // 生成する
                         Instantiate(doorPrefab, pos, Quaternion.identity);
+                    }
                     else
+                    {
+                        // 生成する
                         Instantiate(fakeDoorPrefab, pos, Quaternion.identity);
+                    }
                 }
             }
         }

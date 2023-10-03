@@ -55,8 +55,8 @@ public class CameraScript : MonoBehaviour
         current.x += Input.GetAxis("Mouse X") * 4.0f;
         current.y += Input.GetAxis("Mouse Y") * 2.0f;
 
-        current.x += Input.GetAxis("CameraYaw") * moveX;
-        current.y += Input.GetAxis("CameraPitch") * moveY;
+        //current.x += Input.GetAxis("CameraYaw") * moveX;
+        //current.y += Input.GetAxis("CameraPitch") * moveY;
 
         // カメラの回転の制限
         current.y = Mathf.Clamp(current.y, YAngle_MIN, YAngle_MAX);
