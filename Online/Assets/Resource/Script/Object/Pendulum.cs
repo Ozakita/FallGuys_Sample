@@ -13,8 +13,6 @@ public class Pendulum : MonoBehaviour
 
     [SerializeField, Header("回転したい軸")]
     public Vector3 axis;
-    [SerializeField, Header("回転角度")]
-    public float angle;
     [SerializeField, Header("スピード")]
     public float speed;
     [SerializeField, Header("ディレイタイマー")]
